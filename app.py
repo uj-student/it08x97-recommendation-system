@@ -2,6 +2,9 @@ import csv
 import random
 
 MY_CSV = "food_coded_temp.csv"
+TRAINING_SET = "train.csv"
+TEST_SET = "test.csv"
+
 
 def open_user_file():
 	# open csv file and write each row into array (students)
@@ -38,5 +41,23 @@ def split_data(data):
 
 	print("\nTest set is {} students.".format(len(data)))
 
-split_data(open_user_file())
+	heading = ["GPA","Gender","breakfast","calories_chicken","calories_day","calories_scone","coffee",\
+			"comfort_food","comfort_food_reasons","comfort_food_reasons_coded","cook","comfort_food_reasons_coded",\
+			"cuisine","diet_current","diet_current_coded","drink","eating_changes","eating_changes_coded",\
+			"eating_changes_coded1","eating_out","employment","ethnic_food","exercise","father_education",\
+			"father_profession","fav_cuisine","fav_cuisine_coded","fav_food","food_childhood","fries",\
+			"fruit_day","grade_level","greek_food","healthy_feeling","healthy_meal","ideal_diet",\
+			"ideal_diet_coded","income","indian_food","italian_food","life_rewarding","marital_status",\
+			"meals_dinner_friend","mother_education","mother_profession","nutritional_check","on_off_campus",\
+			"parents_cook","pay_meal_out","persian_food","self_perception_weight","soup","sports","thai_food","tortilla_calories",\
+			"turkey_calories","type_sports","veggies_day","vitamins","waffle_calories","weight"]
 
+	with open (TRAINING_SET, "w") as training:
+		csv_data = csv.DictWriter(training, fieldnames=heading)
+
+		csv_data.writeheader()
+
+		for row in x_train:
+			csv_data.writerow(row)
+
+split_data(open_user_file())
