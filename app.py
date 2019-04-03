@@ -53,11 +53,18 @@ def split_data(data):
 			"turkey_calories","type_sports","veggies_day","vitamins","waffle_calories","weight"]
 
 	with open (TRAINING_SET, "w") as training:
-		csv_data = csv.DictWriter(training, fieldnames=heading)
+		csv_train = csv.DictWriter(training, fieldnames=heading)
 
-		csv_data.writeheader()
+		csv_train.writeheader()
 
 		for row in x_train:
-			csv_data.writerow(row)
+			csv_train.writerow(row)
+
+	with open(TEST_SET, 'w') as test:
+		csv_test = csv.DictWriter(test, fieldnames=heading)
+		csv_test.writeheader()
+
+		for row in data:
+			csv_test.writerow(row)
 
 split_data(open_user_file())
