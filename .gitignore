@@ -2,6 +2,12 @@ __pycache__/
 
 .vscode
 
+.idea/
+
 test.csv
 
 train.csv
+
+requirements.txt
+
+restaurant.json

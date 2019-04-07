@@ -1,37 +1,39 @@
 {
-    {
-        "id": 1,
-        "name": "early breakfast",
-        "time": 700
-    },
-    {
-        "id": 2,
-        "name": "breakfast",
-        "time": 1030
-    },
-    {
-        "id": 3,
-        "name": "late breakfast",
-        "time": 1200
-    },
-    {
-        "id": 4,
-        "name": "lunch",
-        "time": 1300
-    },
-    {
-        "id": 1,
-        "name": "breakfast",
-        "time": 1030
-    },
-    {
-        "id": 1,
-        "name": "breakfast",
-        "time": 1030
-    },
-    {
-        "id": 1,
-        "name": "breakfast",
-        "time": 1030
-    },
+    "meal": [
+        {
+            "id": 1,
+            "name": "early breakfast",
+            "time": 700
+        },
+        {
+            "id": 2,
+            "name": "breakfast",
+            "time": 1030
+        },
+        {
+            "id": 3,
+            "name": "late breakfast",
+            "time": 1200
+        },
+        {
+            "id": 4,
+            "name": "lunch",
+            "time": 1300
+        },
+        {
+            "id": 1,
+            "name": "breakfast",
+            "time": 1030
+        },
+        {
+            "id": 1,
+            "name": "breakfast",
+            "time": 1030
+        },
+        {
+            "id": 1,
+            "name": "breakfast",
+            "time": 1030
+        }
+    ]
 }
