@@ -11,3 +11,9 @@ train.csv
 requirements.txt
 
 restaurant.json
+
+categories.json
+
+cuisines.json
+
+establishment.json

@@ -6,7 +6,6 @@ from tkinter import (
     Listbox
 )
 import api
-import json
 
 
 class MainWindow:
@@ -35,17 +34,23 @@ class MainWindow:
                command=viewing_meal_type_window)\
             .place(x=150, y=270)
 
+        Button(self.root, text="View Cuisines",
+               height=4, width=16,
+               padx=1, pady=1,
+               command=viewing_cuisines_window) \
+            .place(x=150, y=360)
+
         Button(self.root, text="Get Recommendation",
                 height=4, width=16,
                 padx=1, pady=1,
-                command=GetRecommendation)\
-            .place(x=150, y=360)
+                command=get_recommendation_menu)\
+            .place(x=150, y=450)
 
         Button(self.root, text='Quit',
                 width=16,
                 fg='red', 
                 command=self.root.destroy)\
-            .place(x=150, y=440)
+            .place(x=150, y=530)
 
 
 # reusable method to press-back and destroy window
@@ -57,7 +62,7 @@ def press_back_button(window):
 class ViewRestaurantTypeWindow:
     
     def __init__(self):
-        data = json.loads(api.get_establishments())
+        data = api.get_establishments()
         window = Tk()
         window.title("Restaurants Types")
         listbox = Listbox(window, width=30, height=15)
@@ -66,23 +71,21 @@ class ViewRestaurantTypeWindow:
         listbox.pack()
 
         Button(window, text="Back", command=window.destroy).pack()
-
 # ------------------------------------------------------------------
 
 
 class ViewRestaurantWindow:
     
     def __init__(self):
-        data = json.loads(api.get_rest())
+        data = api.get_restaurants()
         window = Tk()
         window.title("View Restaurants")
         listbox = Listbox(window, width=30, height=15)
-        for rest in data['restaurants']:
-            listbox.insert(1, rest['restaurant']['name'])
+        for rest in data["restaurants"]:
+            listbox.insert(1, rest["restaurant"]["name"])
         listbox.pack()
 
         Button(window, text="Back", command=window.destroy).pack()
-
 # ------------------------------------------------------------------
 
 
@@ -99,7 +102,21 @@ class ViewMealTypesWindow:
         listbox.pack()
 
         Button(window, text="Back", command=window.destroy).pack()
+# ------------------------------------------------------------------
 
+
+class ViewCuisinesWindow:
+
+    def __init__(self):
+        data = api.get_cuisines()
+        window = Tk()
+        window.title("View Cuisines")
+        listbox = Listbox(window, width=30, height=15)
+        for cuisi in data["cuisines"]:
+            listbox.insert(1, cuisi['cuisine']['cuisine_name'])
+        listbox.pack()
+
+        Button(window, text="Back", command=window.destroy).pack()
 # ------------------------------------------------------------------
 
 
@@ -119,6 +136,7 @@ class GetRecommendation:
             .place(x=210, y=70)
         Button(window, text="Back", command=window.destroy)\
             .place(x=175, y=150)
+# ------------------------------------------------------------------
 
 
 def viewing_restaurant_types_window():
@@ -131,6 +149,10 @@ def viewing_restaurant_window():
 
 def viewing_meal_type_window():
     ViewMealTypesWindow()
+
+
+def viewing_cuisines_window():
+    ViewCuisinesWindow()
 
 
 def get_recommendation_menu():
@@ -147,11 +169,11 @@ class SignUp:
         window.geometry("300x150")
         window.title("Sign Up")
 
-        Label(window, text="Full Name: ",width=10,font=10).place(x=20, y=40)
+        Label(window, text="Full Name: ", width=10, font=10).place(x=20, y=40)
 
         Entry(window).place(x=100, y=40)
 
-        Label(window, text="User Id: ",width=10,font=10).place(x=20, y=40)
+        Label(window, text="User Id: ", width=10, font=10).place(x=20, y=40)
 
         Entry(window).place(x=100, y=40)
 
@@ -176,7 +198,7 @@ class LogIn:
         Entry(window).place(x=100, y=40)
 
         Button(window, text="Search").place(x=120, y=70)
-        Button(window, text="Back", command=window.destroy).place(x=180, y=70) 
+        Button(window, text="Back", command=window.destroy).place(x=180, y=70)
 
 
 def create_user_id():
