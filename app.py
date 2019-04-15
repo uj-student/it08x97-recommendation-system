@@ -114,10 +114,10 @@ def select_fields_for_model():
 
 # calculate TF-IDF
 def calculate_tf_idf():
-    data = api.read_data_from_file("restaurant.json")
+    r_data = api.read_data_from_file("restaurant.json")
     cuisines = []
     # get restaurant cuisines
-    for cuisine in data["restaurants"]:
+    for cuisine in r_data["restaurants"]:
         temp = cuisine["restaurant"]["cuisines"]
         cuisines.append(temp)
 
@@ -134,13 +134,48 @@ def calculate_tf_idf():
             a.append(c[j])
 
     cuisines = a
-    print(cuisines)
 
     k = collections.Counter(cuisines)
     print(collections.Counter(cuisines))
 
     cuisine_tf = math.log10(len(k))
-    print(cuisine_tf)
+    print("cuisine tf: {}\n".format(cuisine_tf))
+
+    user_ratings = []
+    for user_r in r_data["restaurants"]:
+        temp = user_r["restaurant"]["user_rating"]["aggregate_rating"]
+        user_ratings.append(temp)
+    print(user_ratings)
+
+    k = collections.Counter(user_ratings)
+    print(k)
+
+    user_ratings_tf = math.log10(len(k))
+    print("user rating tf: {}\n".format(user_ratings_tf))
+
+    rating_text = []
+    for user_r in r_data["restaurants"]:
+        temp = user_r["restaurant"]["user_rating"]["rating_text"]
+        rating_text.append(temp)
+    print(rating_text)
+
+    k = collections.Counter(rating_text)
+    print(k)
+
+    rating_text_tf = math.log10(len(k))
+    print("rating text tf: {}\n".format(rating_text_tf))
+
+    price_range = []
+    for user_r in r_data["restaurants"]:
+        temp = user_r["restaurant"]["price_range"]
+        price_range.append(temp)
+    print(price_range)
+
+    k = collections.Counter(price_range)
+    print(k)
+
+    price_range_tf = math.log10(len(k))
+    print("price range tf: {}\n".format(price_range_tf))
 
 
 calculate_tf_idf()
