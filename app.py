@@ -1,23 +1,30 @@
 import csv
 import random
+import os
+import api
+import collections
+import math
 
 MY_CSV = "food_coded_temp.csv"
 TRAINING_SET = "train.csv"
 TEST_SET = "test.csv"
+TRAINING_DATA = "training_model.csv"
 
 
 def open_user_file():
-    # open csv file and write each row into array (students)
-    with open(MY_CSV, "r") as csv_data:
-        data = csv.DictReader(csv_data)
-        count = 0
-        students = []
-        for row in data:
-            students.append(row)
-            count += 1  # keep track of entries into array
+    file_present = os.path.isfile(MY_CSV)
+    if file_present:
+        # open csv file and write each row into array (students)
+        with open(MY_CSV, "r") as csv_data:
+            data = csv.DictReader(csv_data)
+            count = 0
+            students = []
+            for row in data:
+                students.append(row)
+                count += 1  # keep track of entries into array
 
-        print("\n\n\nNumber of datasets is: {}".format(count))
-    return students
+            print("\n\n\nNumber of datasets is: {}".format(count))
+        return students
 
 
 def split_data(data):
@@ -70,34 +77,105 @@ def split_data(data):
 
 
 def select_fields_for_model():
-    model_headings = ["Gender", "breakfast", "coffee", "comfort_food_reasons", "comfort_food_reasons_coded", "cook",
-                      "cuisine", "diet_current_coded", "drink", "eating_changes", "eating_changes_coded1", "eating_out",
-                      "employment", "exercise", "fav_cuisine_coded", "fav_food", "food_childhood", "fries", "fruit_day",
-                      "greek_food", "healthy_feeling", "ideal_diet_coded", "indian_food", "italian_food",
-                      "life_rewarding", "marital_status", "nutritional_check", "parents_cook", "pay_meal_out",
-                      "persian_food", "self_perception_weight", "soup", "sports", "thai_food", "veggies_day", "vitamins"
-                      , "weight"]
+    file_present = os.path.isfile(TRAINING_SET)
+    if file_present:
+        model_headings = ["Gender", "breakfast", "coffee", "comfort_food_reasons", "comfort_food_reasons_coded", "cook",
+                          "cuisine", "diet_current_coded", "drink", "eating_changes", "eating_changes_coded1", "eating_out",
+                          "employment", "exercise", "fav_cuisine_coded", "fav_food", "food_childhood", "fries", "fruit_day",
+                          "greek_food", "healthy_feeling", "ideal_diet_coded", "indian_food", "italian_food",
+                          "life_rewarding", "marital_status", "nutritional_check", "parents_cook", "pay_meal_out",
+                          "persian_food", "self_perception_weight", "soup", "sports", "thai_food", "veggies_day", "vitamins"
+                          , "weight"]
 
-    with open(TRAINING_SET, "r") as csv_data:
-        data = csv.DictReader(csv_data)
+        with open(TRAINING_SET, "r") as csv_data:
+            data = csv.DictReader(csv_data)
 
-        with open("training_model.csv", "w") as model:
-            model_csv = csv.DictWriter(model, fieldnames=model_headings)
-            model_csv.writeheader()
+            with open(TRAINING_DATA, "w") as model:
+                model_csv = csv.DictWriter(model, fieldnames=model_headings)
+                model_csv.writeheader()
 
-            for col in data:
-                # remove unwanted data columns before writing to file
-                del col['mother_profession'], col['calories_scone'], col['calories_day'], col['tortilla_calories'], \
-                    col['comfort_food'], col['calories_chicken'], col['on_off_campus'], col['diet_current'], \
-                    col['healthy_meal'], col['mother_education'], col['ethnic_food'], col['father_profession'], \
-                    col['eating_changes_coded'], col['turkey_calories'], col['ideal_diet'], col['waffle_calories'], \
-                    col['income'], col['meals_dinner_friend'], col['grade_level'], col['type_sports'], \
-                    col['fav_cuisine'], col['father_education'], col['GPA']
+                for col in data:
+                    # remove unwanted data columns before writing to file
+                    del col['mother_profession'], col['calories_scone'], col['calories_day'], col['tortilla_calories'], \
+                        col['comfort_food'], col['calories_chicken'], col['on_off_campus'], col['diet_current'], \
+                        col['healthy_meal'], col['mother_education'], col['ethnic_food'], col['father_profession'], \
+                        col['eating_changes_coded'], col['turkey_calories'], col['ideal_diet'], col['waffle_calories'], \
+                        col['income'], col['meals_dinner_friend'], col['grade_level'], col['type_sports'], \
+                        col['fav_cuisine'], col['father_education'], col['GPA']
 
-                model_csv.writerow(col)
+                    model_csv.writerow(col)
 
-            print("Variables successfully Added!!!")
+                print("Variables successfully Added!!!")
 
 
-select_fields_for_model()
+# select_fields_for_model()
 # split_data(open_user_file())
+
+
+# calculate TF-IDF
+def calculate_tf_idf():
+    r_data = api.read_data_from_file("restaurant.json")
+    cuisines = []
+    # get restaurant cuisines
+    for cuisine in r_data["restaurants"]:
+        temp = cuisine["restaurant"]["cuisines"]
+        cuisines.append(temp)
+
+    # cuisines formatted as [Contemporary, Burger, Pizza]
+    # remove comma (,)
+    for i in range(len(cuisines)):
+        cuisines[i] = cuisines[i].replace(",", "")
+
+    # create new array that adds each cuisine into its own cell
+    a = []
+    for i in range(len(cuisines)):
+        c = cuisines[i].split()
+        for j in range(len(c)):
+            a.append(c[j])
+
+    cuisines = a
+
+    k = collections.Counter(cuisines)
+    print(collections.Counter(cuisines))
+
+    cuisine_tf = math.log10(len(k))
+    print("cuisine tf: {}\n".format(cuisine_tf))
+
+    user_ratings = []
+    for user_r in r_data["restaurants"]:
+        temp = user_r["restaurant"]["user_rating"]["aggregate_rating"]
+        user_ratings.append(temp)
+    print(user_ratings)
+
+    k = collections.Counter(user_ratings)
+    print(k)
+
+    user_ratings_tf = math.log10(len(k))
+    print("user rating tf: {}\n".format(user_ratings_tf))
+
+    rating_text = []
+    for user_r in r_data["restaurants"]:
+        temp = user_r["restaurant"]["user_rating"]["rating_text"]
+        rating_text.append(temp)
+    print(rating_text)
+
+    k = collections.Counter(rating_text)
+    print(k)
+
+    rating_text_tf = math.log10(len(k))
+    print("rating text tf: {}\n".format(rating_text_tf))
+
+    price_range = []
+    for user_r in r_data["restaurants"]:
+        temp = user_r["restaurant"]["price_range"]
+        price_range.append(temp)
+    print(price_range)
+
+    k = collections.Counter(price_range)
+    print(k)
+
+    price_range_tf = math.log10(len(k))
+    print("price range tf: {}\n".format(price_range_tf))
+
+
+calculate_tf_idf()
