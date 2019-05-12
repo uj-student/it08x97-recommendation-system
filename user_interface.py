@@ -3,10 +3,11 @@ from tkinter import (
     Label, 
     Entry, 
     Button, 
-    Listbox
+    Listbox,
+    Text
 )
 import api
-
+import app
 
 class MainWindow:
 
@@ -17,31 +18,31 @@ class MainWindow:
 
         # this is the user menu, loads every time on launch
         Button(self.root, text="View Restaurants Types",
-               height=4, width=16,
+               height=4, width=18,
                padx=1, pady=1,
                command=viewing_restaurant_types_window)\
             .place(x=150, y=90)
 
         Button(self.root, text="View Restaurant",
-               height=4, width=16,
+               height=4, width=18,
                padx=1, pady=1,
                command=viewing_restaurant_window)\
             .place(x=150, y=180)
 
         Button(self.root, text="View Meal Types",
-               height=4, width=16,
+               height=4, width=18,
                padx=1, pady=1,
                command=viewing_meal_type_window)\
             .place(x=150, y=270)
 
         Button(self.root, text="View Cuisines",
-               height=4, width=16,
+               height=4, width=18,
                padx=1, pady=1,
                command=viewing_cuisines_window) \
             .place(x=150, y=360)
 
         Button(self.root, text="Get Recommendation",
-                height=4, width=16,
+                height=4, width=18,
                 padx=1, pady=1,
                 command=get_recommendation_menu)\
             .place(x=150, y=450)
@@ -112,8 +113,8 @@ class ViewCuisinesWindow:
         window = Tk()
         window.title("View Cuisines")
         listbox = Listbox(window, width=30, height=15)
-        for cuisi in data["cuisines"]:
-            listbox.insert(1, cuisi['cuisine']['cuisine_name'])
+        for cuisine in data["cuisines"]:
+            listbox.insert(1, cuisine['cuisine']['cuisine_name'])
         listbox.pack()
 
         Button(window, text="Back", command=window.destroy).pack()
@@ -121,21 +122,52 @@ class ViewCuisinesWindow:
 
 
 class GetRecommendation:
+
     def __init__(self):
         window = Tk()
         window.geometry('400x200')
         window.title("Get Recommendations")
 
-        Button(window, text="I have a user id",
+        Button(window, text="Train Model",
                height=2, width=16,
-               command=get_user_id)\
-            .place(x=40, y=70)
-        Button(window, text="I want a user id",
+               command=self.train_model)\
+            .pack()
+
+        Button(window, text="Test Model",
                height=2, width=16,
                command=create_user_id)\
-            .place(x=210, y=70)
+            .pack()
+
+        Button(window, text="Get Recommendation",
+               height=2, width=16,
+               command=create_user_id) \
+            .pack()
+
         Button(window, text="Back", command=window.destroy)\
             .place(x=175, y=150)
+
+    def train_model(self):
+        self.window = Tk()
+        # self.window.geometry('400x200')
+        self.window.title("Training Model")
+
+        text = Text(self.window, width=40, height=15)
+        text.pack()
+        text.insert("end", "\tRecommended Restaurants: \n")
+        for i in app.calculate_df_cuisine():
+            text.insert("end", "\t\t{}\n".format(i))
+        text.tag_config('word_class', font='arial 12 bold italic', lmargin1=30,
+                             spacing1=10, spacing3=15)
+        text.pack()
+
+        Button(self.window, text="Back", command=self.window.destroy).pack()
+
+    def format_output(self):
+        output = app.calculate_df_cuisine()
+        for i in output:
+            return i
+
+
 # ------------------------------------------------------------------
 
 
