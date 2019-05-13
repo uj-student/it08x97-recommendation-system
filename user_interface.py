@@ -1,13 +1,14 @@
 from tkinter import (
-    Tk, 
-    Label, 
-    Entry, 
-    Button, 
+    Tk,
+    Label,
+    Entry,
+    Button,
     Listbox,
     Text
 )
 import api
 import app
+
 
 class MainWindow:
 
@@ -20,48 +21,44 @@ class MainWindow:
         Button(self.root, text="View Restaurants Types",
                height=4, width=18,
                padx=1, pady=1,
-               command=viewing_restaurant_types_window)\
+               command=viewing_restaurant_types_window) \
             .place(x=150, y=90)
 
         Button(self.root, text="View Restaurant",
                height=4, width=18,
                padx=1, pady=1,
-               command=viewing_restaurant_window)\
+               command=viewing_restaurant_window) \
             .place(x=150, y=180)
-
-        Button(self.root, text="View Meal Types",
-               height=4, width=18,
-               padx=1, pady=1,
-               command=viewing_meal_type_window)\
-            .place(x=150, y=270)
 
         Button(self.root, text="View Cuisines",
                height=4, width=18,
                padx=1, pady=1,
                command=viewing_cuisines_window) \
-            .place(x=150, y=360)
+            .place(x=150, y=270)
 
         Button(self.root, text="Get Recommendation",
-                height=4, width=18,
-                padx=1, pady=1,
-                command=get_recommendation_menu)\
-            .place(x=150, y=450)
+               height=4, width=18,
+               padx=1, pady=1,
+               command=get_recommendation_menu) \
+            .place(x=150, y=360)
 
         Button(self.root, text='Quit',
-                width=16,
-                fg='red', 
-                command=self.root.destroy)\
-            .place(x=150, y=530)
+               width=16,
+               fg='red',
+               command=self.root.destroy) \
+            .place(x=150, y=450)
 
 
 # reusable method to press-back and destroy window
 def press_back_button(window):
     return Button(window, text="Back", command=window.destroy)
+
+
 # ------------------------------------------------------------------
 
 
 class ViewRestaurantTypeWindow:
-    
+
     def __init__(self):
         data = api.get_establishments()
         window = Tk()
@@ -72,11 +69,13 @@ class ViewRestaurantTypeWindow:
         listbox.pack()
 
         Button(window, text="Back", command=window.destroy).pack()
+
+
 # ------------------------------------------------------------------
 
 
 class ViewRestaurantWindow:
-    
+
     def __init__(self):
         data = api.get_restaurants()
         window = Tk()
@@ -87,22 +86,8 @@ class ViewRestaurantWindow:
         listbox.pack()
 
         Button(window, text="Back", command=window.destroy).pack()
-# ------------------------------------------------------------------
 
 
-class ViewMealTypesWindow:
-
-    def __init__(self):
-        window = Tk()
-        window.title("Meal Types")
-        listbox = Listbox(window, width=30, height=15)
-        # listbox.insert(1, "Meal Type")
-        # listbox.insert(2, "Meal Type")
-        # listbox.insert(3, "Meal Type")
-        # listbox.insert(4, "Meal Type")        
-        listbox.pack()
-
-        Button(window, text="Back", command=window.destroy).pack()
 # ------------------------------------------------------------------
 
 
@@ -118,6 +103,8 @@ class ViewCuisinesWindow:
         listbox.pack()
 
         Button(window, text="Back", command=window.destroy).pack()
+
+
 # ------------------------------------------------------------------
 
 
@@ -130,12 +117,12 @@ class GetRecommendation:
 
         Button(window, text="Train Model",
                height=2, width=16,
-               command=self.train_model)\
+               command=self.train_model) \
             .pack()
 
         Button(window, text="Test Model",
                height=2, width=16,
-               command=create_user_id)\
+               command=create_user_id) \
             .pack()
 
         Button(window, text="Get Recommendation",
@@ -143,7 +130,7 @@ class GetRecommendation:
                command=create_user_id) \
             .pack()
 
-        Button(window, text="Back", command=window.destroy)\
+        Button(window, text="Back", command=window.destroy) \
             .place(x=175, y=150)
 
     def train_model(self):
@@ -151,13 +138,13 @@ class GetRecommendation:
         # self.window.geometry('400x200')
         self.window.title("Training Model")
 
-        text = Text(self.window, width=40, height=15)
+        text = Text(self.window, width=40, height=25)
         text.pack()
         text.insert("end", "\tRecommended Restaurants: \n")
         for i in app.calculate_df_cuisine():
-            text.insert("end", "\t\t{}\n".format(i))
+            text.insert("end", "{}\n".format(i))
         text.tag_config('word_class', font='arial 12 bold italic', lmargin1=30,
-                             spacing1=10, spacing3=15)
+                        spacing1=10, spacing3=15)
         text.pack()
 
         Button(self.window, text="Back", command=self.window.destroy).pack()
@@ -179,16 +166,13 @@ def viewing_restaurant_window():
     ViewRestaurantWindow()
 
 
-def viewing_meal_type_window():
-    ViewMealTypesWindow()
-
-
 def viewing_cuisines_window():
     ViewCuisinesWindow()
 
 
 def get_recommendation_menu():
     GetRecommendation()
+
 
 # ------------------------------------------------------------------
 
@@ -211,12 +195,14 @@ class SignUp:
 
         Button(window, text="Sign Up").place(x=120, y=70)
         Button(window, text="Back", command=window.destroy).place(x=180, y=70)
+
+
 # ------------------------------------------------------------------
 
 
 # look up user
 class LogIn:
-    def __init__(self): 
+    def __init__(self):
         window = Tk()
         window.geometry("300x150")
         window.title("Search")
@@ -240,6 +226,7 @@ def create_user_id():
 def get_user_id():
     LogIn()
 
+
 # ------------------------------------------------------------------
 
 
@@ -248,7 +235,7 @@ def _launch():
     window.geometry("500x800")
     window.title("Restaurant Recommendation System")
     Label(window, text="Welcome to RRS"
-                , width=20, font=("bold", 20))\
+          , width=20, font=("bold", 20)) \
         .place(x=90, y=53)
     MainWindow(window)
     window.mainloop()

@@ -314,8 +314,11 @@ def calculate_tf_childhood_food():
             # handle comma separated reasons like {'Quesadilla, chocolate, steak'}
             for i in range(len(food_childhood)):
                 food_childhood[i] = food_childhood[i].replace(",", "")
+                food_childhood[i] = food_childhood[i].replace("/", "")
+
 
             # create new array that adds each reason into its own cell
+            # {'Quesadilla, chocolate, steak'} -> [['Quesadilla', 'chocolate', 'steak']]
             tmp = []
             for i in range(len(food_childhood)):
                 c = food_childhood[i].split()
@@ -325,8 +328,18 @@ def calculate_tf_childhood_food():
             food_childhood = tmp
 
             k = collections.Counter(food_childhood)
-            food_childhood_tf = math.log10(len(k))
-            print("food childhood tf {}:".format(food_childhood_tf))
+            print("len-k: {} \nK: \n{}".format(len(k), k))
+            # food_childhood_tf = math.log10(len(k))
+            food_childhood_tf = math.log10(len(food_childhood))
+            print("food childhood tf **{}:".format(food_childhood_tf))
+
+            food_childhood_df = []
+            p = 0
+            print("{:<15} {:<10} {:<10}".format("Food", "Count", "Weight"))
+            for i in k:
+                food_childhood_df.append(food_childhood_tf - math.log10(k[i]))
+                print("{:<15} {:<10} {:<10}".format(i, k[i], food_childhood_df[p]))
+                p += 1
 
             users_food = []
             print("child hood array: ", food_childhood_entries)
@@ -335,9 +348,10 @@ def calculate_tf_childhood_food():
                 childhood_food = childhood_food.replace(",", "").lower().split()
                 users_food.append(childhood_food)
 
-        return [users_food, food_childhood_tf]
+        return [users_food, food_childhood_tf, food_childhood_df, k]
 
-# calculate_tf_users()
+
+# calculate_tf_childhood_food()
 # print("App class: ", type(calculate_tf_users()))
 
 
@@ -354,11 +368,8 @@ def calculate_df_cuisine():
         tmp_id = ids["restaurant"]["id"].lower()
         tmp_name = ids["restaurant"]["name"]
         tmp_cuisine = ids["restaurant"]["cuisines"].lower()
-        # c_count = tmp_cuisine.count(",")
-        # for c in range(c_count + 1):
         r_id.append(tmp_id)
         r_name.append(tmp_name)
-        # count.append(c_count + 1)
         cuisines.append(tmp_cuisine)
 
     print("CUISINES: ", len(r_id))
@@ -510,21 +521,44 @@ def calculate_df_cuisine():
     for i in range(len(r_id)):
         print("{:<15} {:<50} {:<10}".format(r_id[i], restaurant_cuisines[i], restaurant_score[i]))
 
-    user_score = calculate_tf_childhood_food()[1]
-    users_childhood_food = calculate_tf_childhood_food()[0]
+    child_hood_scores = calculate_tf_childhood_food()
+    user_score = child_hood_scores[1]
+    users_childhood_food = child_hood_scores[0]
+    food_weight = child_hood_scores[2]
+    food_array = child_hood_scores[3]
     cuisine_score = obj
     print("User Score: ", user_score, "\n", type(users_childhood_food))
     print(cuisine_score.keys())
 
     tmp_results = []
+    p = 0
     for i in range(len(users_childhood_food)):
         for j in users_childhood_food[i]:
             if j in cuisine_score.keys():
                 c = cuisine_score.get(j)
+                # c = food_weight[j]
                 print("childhood food found: ", j, " ", c)
+                print("\n*Attempt: ", food_array[j], " ", j, " ", type(food_array))
+                for k in range(len(food_array)):
+                    print("hello: ", p)
+                    if food_array[k] == j:
+                        print("hello: ", k)
                 # print("Score: ", c * user_score)
                 tmp_results.append(j)
+        p += 1
+
     print("Found matches for users: ", tmp_results)
+
+    # tmp_results = []
+    # for i in range(len(users_childhood_food)):
+    #     for j in users_childhood_food[i]:
+    #         if j in cuisine_score.keys():
+    #             c = cuisine_score.get(j)
+    #             # c = food_weight[j]
+    #             print("childhood food found: ", j, " ", c)
+    #             # print("Score: ", c * user_score)
+    #             tmp_results.append(j)
+    # print("Found matches for users: ", tmp_results)
 
     i = 0
     j = len(restaurant_score)
@@ -556,22 +590,18 @@ def calculate_df_cuisine():
     for i in range(len(restaurant_score)):
         if a == restaurant_score[i]:
             print(r_name[i])
-            b.append(r_name[i])
+            b.append((r_name[i], restaurant_score[i]))
     return b
 
 
-    # Method to compare which one is the more close.
-
-# We find the closest by taking the difference
-# between the target and both values. It assumes
-# that val2 is greater than val1 and target lies
+# Method to compare which one is the more close.
+# assumes that val2 is greater than val1 and target lies
 # between these two.
-def get_closest(val1, val2, target):
-    if abs(target - val1) >= abs(val2 - target):
-        return val2
+def get_closest(v1, v2, target):
+    if abs(target - v1) >= abs(v2 - target):
+        return v2
     else:
-        return val1
+        return v1
 
 
-# need to add object to handle array data
 calculate_df_cuisine()
