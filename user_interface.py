@@ -18,25 +18,25 @@ class MainWindow:
         self.root = root
 
         # this is the user menu, loads every time on launch
-        Button(self.root, text="View Restaurants Types",
-               height=4, width=18,
-               padx=1, pady=1,
-               command=viewing_restaurant_types_window) \
-            .place(x=150, y=90)
-
-        Button(self.root, text="View Restaurant",
+        Button(self.root, text="View Restaurants",
                height=4, width=18,
                padx=1, pady=1,
                command=viewing_restaurant_window) \
-            .place(x=150, y=180)
+            .place(x=150, y=90)
 
         Button(self.root, text="View Cuisines",
                height=4, width=18,
                padx=1, pady=1,
                command=viewing_cuisines_window) \
+            .place(x=150, y=180)
+
+        Button(self.root, text="View Restaurants Types",
+               height=4, width=18,
+               padx=1, pady=1,
+               command=viewing_restaurant_types_window) \
             .place(x=150, y=270)
 
-        Button(self.root, text="Get Recommendation",
+        Button(self.root, text="Recommendation Menu",
                height=4, width=18,
                padx=1, pady=1,
                command=get_recommendation_menu) \
