@@ -530,24 +530,29 @@ def calculate_df_cuisine():
     print("User Score: ", user_score, "\n", type(users_childhood_food))
     print(cuisine_score.keys())
 
-    tmp_results = []
+    tmp_2 = []
+    score = []
     p = 0
     for i in range(len(users_childhood_food)):
+        tmp_1 = []
+        tmp_score = 1
         for j in users_childhood_food[i]:
             if j in cuisine_score.keys():
-                c = cuisine_score.get(j)
-                # c = food_weight[j]
-                print("childhood food found: ", j, " ", c)
-                print("\n*Attempt: ", food_array[j], " ", j, " ", type(food_array))
-                for k in range(len(food_array)):
-                    print("hello: ", p)
-                    if food_array[k] == j:
-                        print("hello: ", k)
-                # print("Score: ", c * user_score)
-                tmp_results.append(j)
+                print("\nchildhood food found: ", j)
+                food_score = user_score - math.log10(food_array[j])
+                print("*food score: ", food_score)
+                tmp_score = tmp_score * food_score
+                tmp_1.append(j)
+        score.append(tmp_score)
+        print("tmp_score: ", tmp_score)
+        tmp_2.append(tmp_1)
         p += 1
+        if p > 3:
+            break
 
-    print("Found matches for users: ", tmp_results)
+    print("tmp scores: ", score)
+    print("Found matches for users: ", tmp_2)
+    print("food array: ", food_array)
 
     # tmp_results = []
     # for i in range(len(users_childhood_food)):
@@ -566,8 +571,7 @@ def calculate_df_cuisine():
         mid = int((i + j) / 2)
         if restaurant_score[mid] == user_score:
             print(restaurant_score[mid])
-        # If target is less than array
-        # element, then search in left
+        #
         if user_score < restaurant_score[mid]:
             # If target is greater than previous
             # to mid, return closest of two
@@ -578,13 +582,13 @@ def calculate_df_cuisine():
             # If target is greater than mid
         else:
             if mid < len(restaurant_score) - 1 and user_score < restaurant_score[mid + 1]:
-                print("tjv", get_closest(restaurant_score[mid], restaurant_score[mid + 1], user_score))
+                print("Left side of user score: ", get_closest(restaurant_score[mid], restaurant_score[mid + 1], user_score))
             # update i
             i = mid + 1
 
     # Only single element left after search
 
-    print("\n\n\n\n\naaaaaaa ", restaurant_score[mid])
+    print("\n\n\n\n\nRestaurant Score ", restaurant_score[mid])
     a = restaurant_score[mid]
     b = []
     for i in range(len(restaurant_score)):
@@ -597,8 +601,8 @@ def calculate_df_cuisine():
 # Method to compare which one is the more close.
 # assumes that val2 is greater than val1 and target lies
 # between these two.
-def get_closest(v1, v2, target):
-    if abs(target - v1) >= abs(v2 - target):
+def get_closest(v1, v2, goal):
+    if abs(goal - v1) >= abs(v2 - goal):
         return v2
     else:
         return v1

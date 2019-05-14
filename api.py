@@ -84,11 +84,11 @@ def read_data_from_json_file(file_name):
         return json.load(read_file)
 
 
-# def get_rest(typ, name):
-#     exist = os.path.isfile("restaurant.csv")
-#     if exist:
-#         return  # return file
-#     res = get_resource(search.format(typ, name))
-#     if res.status_code == 200:
-#         data = res.json()
-#         return json.dumps(data, indent=2)
+def get_rest(typ, name):
+    exist = os.path.isfile("restaurant.csv")
+    if exist:
+        return  # return file
+    res = get_resource(search.format(typ, name))
+    if res.status_code == 200:
+        data = res.json()
+        return json.dumps(data, indent=2)
