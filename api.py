@@ -29,22 +29,22 @@ def get_resource(end_point=None, p=None):
 def get_establishments():
     exist = os.path.isfile("establishment.json")
     if exist:
-        return read_data_from_file("establishment.json")
+        return read_data_from_json_file("establishment.json")
     res = get_resource(ESTABLISHMENT + str(city_id))
     if res.status_code == 200:
         data = res.json()
-        write_response_to_file("establishment.json", data)
+        write_response_to_json_file("establishment.json", data)
         return json.dumps(data, indent=2, sort_keys=True)
 
 
 def get_categories():
     exist = os.path.isfile("categories.json")
     if exist:
-        return read_data_from_file("categories.json")
+        return read_data_from_json_file("categories.json")
     res = get_resource(CATEGORY)
     if res.status_code == 200:
         data = res.json()
-        write_response_to_file("categories.json", data)
+        write_response_to_json_file("categories.json", data)
         return json.dumps(data, indent=2, sort_keys=True)
         # for category in data['categories']:
         #     print (category['categories'])
@@ -53,33 +53,33 @@ def get_categories():
 def get_cuisines():
     exist = os.path.isfile("cuisines.json")
     if exist:
-        return read_data_from_file("cuisines.json")
+        return read_data_from_json_file("cuisines.json")
     else:
         res = get_resource(CUISINE + str(city_id))
         if res.status_code == 200:
             data = res.json()
-            write_response_to_file("cuisines.json", data)
+            write_response_to_json_file("cuisines.json", data)
             return json.dumps(data, indent=2, sort_keys=True)
 
 
 def get_restaurants():
     exist = os.path.isfile("restaurant.json")
     if exist:
-        return read_data_from_file("restaurant.json")
+        return read_data_from_json_file("restaurant.json")
     else:
         res = get_resource(SEARCH, param)
         if res.status_code == 200:
             data = res.json()
-            write_response_to_file("restaurant.json", data)
+            write_response_to_json_file("restaurant.json", data)
             return json.dumps(data, indent=2, sort_keys=True)
 
 
-def write_response_to_file(file_name, data):
+def write_response_to_json_file(file_name, data):
     with open(file_name, 'w') as write_file:
         json.dump(data, write_file, indent=2, sort_keys=True)
 
 
-def read_data_from_file(file_name):
+def read_data_from_json_file(file_name):
     with open(file_name, "r") as read_file:
         return json.load(read_file)
 
