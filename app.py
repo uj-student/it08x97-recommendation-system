@@ -573,17 +573,13 @@ def calculate_df_cuisine():
             print(restaurant_score[mid])
         #
         if user_score < restaurant_score[mid]:
-            # If target is greater than previous
-            # to mid, return closest of two
             if user_score > 0 and user_score > restaurant_score[mid - 1]:
                 print("\n\n\nhyh", get_closest(restaurant_score[mid - 1], restaurant_score[mid], user_score))
             # Repeat for left half
             j = user_score
-            # If target is greater than mid
         else:
             if mid < len(restaurant_score) - 1 and user_score < restaurant_score[mid + 1]:
                 print("Left side of user score: ", get_closest(restaurant_score[mid], restaurant_score[mid + 1], user_score))
-            # update i
             i = mid + 1
 
     # Only single element left after search
@@ -599,8 +595,7 @@ def calculate_df_cuisine():
 
 
 # Method to compare which one is the more close.
-# assumes that val2 is greater than val1 and target lies
-# between these two.
+# v2 must be greater than v1 and goal between them.
 def get_closest(v1, v2, goal):
     if abs(goal - v1) >= abs(v2 - goal):
         return v2
