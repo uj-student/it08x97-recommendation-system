@@ -6,6 +6,7 @@ from tkinter import (
     Listbox,
     Text
 )
+
 import api
 import app
 
@@ -61,6 +62,7 @@ class ViewRestaurantTypeWindow:
 
     def __init__(self):
         data = api.get_establishments()
+        print(type(data), "Heloooooooooooo")
         window = Tk()
         window.title("Restaurants Types")
         listbox = Listbox(window, width=30, height=15)
@@ -149,7 +151,8 @@ class GetRecommendation:
 
         Button(self.window, text="Back", command=self.window.destroy).pack()
 
-    def format_output(self):
+    @staticmethod
+    def format_output():
         output = app.calculate_df_cuisine()
         for i in output:
             return i

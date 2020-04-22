@@ -1,6 +1,7 @@
 import json
-import requests
 import os
+
+import requests
 
 URL = "https://developers.zomato.com/api/v2.1/"
 KEY = "9d83b19463fa5f6cf94b1af9f5ca17fa"
@@ -19,6 +20,10 @@ param = {
     'city_id': city_id,
     'q': 'mushroom'
 }
+
+
+class ApiController:
+    pass
 
 
 def get_resource(end_point=None, p=None):

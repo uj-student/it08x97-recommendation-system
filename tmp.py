@@ -2,49 +2,53 @@ from tkinter import (
     Tk, Label, Entry, Button, Listbox
 )
 
-class MainWindow():
+
+class MainWindow:
 
     def __init__(self, root):
         super().__init__()
 
         self.root = root
 
-        #this is the user menu, loads everytime on launch
-        Button(self.root, text = "View Restaurants", 
-                height=4, width=16, 
-                padx=1, pady=1, 
-                command=viewingRestaurantWindow)\
+        # this is the user menu, loads everytime on launch
+        Button(self.root, text="View Restaurants",
+               height=4, width=16,
+               padx=1, pady=1,
+               command=viewing_restaurant_window) \
             .pack()
 
-        Button(self.root, text = "Add Restaurant(s)\nnot yet working", 
-                height=4, width=16, 
-                padx=1, pady=1)\
+        Button(self.root, text="Add Restaurant(s)\nnot yet working",
+               height=4, width=16,
+               padx=1, pady=1) \
             .pack()
 
-        Button(self.root, text = "View Meal Types", 
-                height=4, width=16, 
-                padx=1, pady=1, 
-                command=viewingMealTypeWindow)\
+        Button(self.root, text="View Meal Types",
+               height=4, width=16,
+               padx=1, pady=1,
+               command=viewing_eal_ype_window) \
             .pack()
 
-        Button(self.root, text = "Get Recommendation", 
-                height=4, width=16, 
-                padx=1, pady=1,
-                command=GetRecommendation)\
-        .pack()
+        Button(self.root, text="Get Recommendation",
+               height=4, width=16,
+               padx=1, pady=1,
+               command=GetRecommendation) \
+            .pack()
 
         Button(self.root, text='Quit',
-                width=16,
-                fg='red', 
-                command=self.root.destroy)\
-        .pack()
-        
-#re-useable method to pressback and destroy window
-def pressBackButton(window):
+               width=16,
+               fg='red',
+               command=self.root.destroy) \
+            .pack()
+
+
+# re-useable method to pressback and destroy window
+def press_back_button(window):
     return Button(window, text="Back", command=window.destroy)
-#------------------------------------------------------------------
-class ViewRestaurantsWindow():
-    
+
+
+# ------------------------------------------------------------------
+class ViewRestaurantsWindow:
+
     def __init__(self):
         window = Tk()
         window.title("View Restaurants")
@@ -58,8 +62,9 @@ class ViewRestaurantsWindow():
 
         Button(window, text="Back", command=window.destroy).pack()
 
-#------------------------------------------------------------------
-class ViewMealTypesWindow():
+
+# ------------------------------------------------------------------
+class ViewMealTypesWindow:
 
     def __init__(self):
         window = Tk()
@@ -74,47 +79,52 @@ class ViewMealTypesWindow():
 
         Button(window, text="Back", command=window.destroy).pack()
 
-#------------------------------------------------------------------
-class GetRecommendation():
+
+# ------------------------------------------------------------------
+class GetRecommendation:
     def __init__(self):
         window = Tk()
         window.geometry('400x200')
         window.title("Get Recommendations")
 
-        Button(window, text="I have a user id", 
-                        height=2, width=16,
-                        command=getUserId)\
-                .pack()
-        Button(window, text="I want a user id", 
-                        height=2, width=16,
-                        command=createUserId)\
-                .pack()
-        Button(window, text="Back", command=window.destroy)\
-                .pack()
+        Button(window, text="I have a user id",
+               height=2, width=16,
+               command=get_user_id) \
+            .pack()
+        Button(window, text="I want a user id",
+               height=2, width=16,
+               command=create_user_id) \
+            .pack()
+        Button(window, text="Back", command=window.destroy) \
+            .pack()
 
-def viewingRestaurantWindow():
+
+def viewing_restaurant_window():
     ViewRestaurantsWindow()
 
-def viewingMealTypeWindow():
+
+def viewing_eal_ype_window():
     ViewMealTypesWindow()
 
-def getRecommendationMenu():
+
+def get_recommendation_menu():
     GetRecommendation()
 
-#------------------------------------------------------------------
-#to get user id
-class SignUp():
+
+# ------------------------------------------------------------------
+# to get user id
+class SignUp:
 
     def __init__(self):
         window = Tk()
         window.geometry("300x150")
         window.title("Sign Up")
 
-        Label(window, text="Full Name: ",width=10,font=(10)).pack()
+        Label(window, text="Full Name: ", width=10, font=10).pack()
 
         Entry(window).pack()
 
-        Label(window, text="User Id: ",width=10,font=(10)).pack()
+        Label(window, text="User Id: ", width=10, font=10).pack()
 
         Entry(window).pack()
 
@@ -122,41 +132,42 @@ class SignUp():
         Button(window, text="Back", command=window.destroy).pack()
 
 
-#------------------------------------------------------------------
-#look up user
-class LogIn():
-    def __init__(self): 
+# ------------------------------------------------------------------
+# look up user
+class LogIn:
+    def __init__(self):
         window = Tk()
         window.geometry("300x150")
         window.title("Search")
 
-        Label(window, text="User Id: ",width=10,font=(10)).pack()
+        Label(window, text="User Id: ", width=10, font=10).pack()
 
         Entry(window).pack()
 
-        Label(window, text="User Id: ",width=10,font=(10)).pack()
+        Label(window, text="User Id: ", width=10, font=10).pack()
 
         Entry(window).pack()
 
         Button(window, text="Search").pack()
-        Button(window, text="Back", command=window.destroy).pack() 
+        Button(window, text="Back", command=window.destroy).pack()
 
-def createUserId():
+
+def create_user_id():
     SignUp()
 
-def getUserId():
+
+def get_user_id():
     LogIn()
 
-#------------------------------------------------------------------
-def launchApp():
+
+# ------------------------------------------------------------------
+def launch_app():
     window = Tk()
     window.geometry("500x500")
     window.title("Restaurant Recommendation System")
-    Label(window, text = "Welcome to RRS"
-                , width=20, font=("bold", 20))\
-    .pack()
+    Label(window, text="Welcome to RRS", width=20, font=("bold", 20)).pack()
     MainWindow(window)
     window.mainloop()
 
 
-launchApp()
+launch_app()

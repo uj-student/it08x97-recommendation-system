@@ -12,6 +12,14 @@ TEST_SET = "test.csv"
 TRAINING_DATA = "training_model.csv"
 
 
+class DataHandler(object):
+    pass
+
+
+class RecommendationFactory(object):
+    pass
+
+
 def open_user_file():
     file_present = os.path.isfile(MY_CSV)
     if file_present:
@@ -30,13 +38,12 @@ def open_user_file():
 
 def split_data(data):
     # data will be split into 80% train and 20% test
-    x_ = 0.8 * len(data)
-    x_ = int(x_)
-    print("\n\nNumber of training set: {}".format(x_))
+    train_split = int(0.8 * len(data))
+    print("\n\nNumber of training set: {}".format(train_split))
 
     x_train = []
     # training data is selected at random form array
-    for row in range(x_):
+    for row in range(train_split):
         # pick random number
         index = random.randint(0, len(data) - 1)
         # pick data at randomly selected place
@@ -54,13 +61,13 @@ def split_data(data):
                "comfort_food", "comfort_food_reasons", "comfort_food_reasons_coded", "cook",
                "comfort_food_reasons_coded", "cuisine", "diet_current", "diet_current_coded", "drink", "eating_changes",
                "eating_changes_coded", "eating_changes_coded1", "eating_out", "employment", "ethnic_food", "exercise",
-               "father_education", "father_profession", "fav_cuisine", "fav_cuisine_coded", "fav_food", "food_childhood",
-               "fries", "fruit_day", "grade_level", "greek_food", "healthy_feeling", "healthy_meal", "ideal_diet",
-               "ideal_diet_coded", "income", "indian_food", "italian_food", "life_rewarding", "marital_status",
-               "meals_dinner_friend", "mother_education", "mother_profession", "nutritional_check", "on_off_campus",
-               "parents_cook", "pay_meal_out", "persian_food", "self_perception_weight", "soup", "sports", "thai_food",
-               "tortilla_calories", "turkey_calories", "type_sports", "veggies_day", "vitamins", "waffle_calories",
-               "weight"]
+               "father_education", "father_profession", "fav_cuisine", "fav_cuisine_coded", "fav_food",
+               "food_childhood", "fries", "fruit_day", "grade_level", "greek_food", "healthy_feeling", "healthy_meal",
+               "ideal_diet", "ideal_diet_coded", "income", "indian_food", "italian_food", "life_rewarding",
+               "marital_status", "meals_dinner_friend", "mother_education", "mother_profession", "nutritional_check",
+               "on_off_campus", "parents_cook", "pay_meal_out", "persian_food", "self_perception_weight", "soup",
+               "sports", "thai_food", "tortilla_calories", "turkey_calories", "type_sports", "veggies_day", "vitamins",
+               "waffle_calories", "weight"]
 
     with open(TRAINING_SET, "w") as training:
         csv_train = csv.DictWriter(training, fieldnames=heading)
@@ -81,12 +88,12 @@ def select_fields_for_model():
     file_present = os.path.isfile(TRAINING_SET)
     if file_present:
         model_headings = ["Gender", "breakfast", "coffee", "comfort_food_reasons", "comfort_food_reasons_coded", "cook",
-                          "cuisine", "diet_current_coded", "drink", "eating_changes", "eating_changes_coded1", "eating_out",
-                          "employment", "exercise", "fav_cuisine_coded", "fav_food", "food_childhood", "fries", "fruit_day",
-                          "greek_food", "healthy_feeling", "ideal_diet_coded", "indian_food", "italian_food",
-                          "life_rewarding", "marital_status", "nutritional_check", "parents_cook", "pay_meal_out",
-                          "persian_food", "self_perception_weight", "soup", "sports", "thai_food", "veggies_day", "vitamins"
-                          , "weight"]
+                          "cuisine", "diet_current_coded", "drink", "eating_changes", "eating_changes_coded1",
+                          "eating_out", "employment", "exercise", "fav_cuisine_coded", "fav_food", "food_childhood",
+                          "fries", "fruit_day", "greek_food", "healthy_feeling", "ideal_diet_coded", "indian_food",
+                          "italian_food", "life_rewarding", "marital_status", "nutritional_check", "parents_cook",
+                          "pay_meal_out", "persian_food", "self_perception_weight", "soup", "sports", "thai_food",
+                          "veggies_day", "vitamins", "weight"]
 
         with open(TRAINING_SET, "r") as csv_data:
             data = csv.DictReader(csv_data)
@@ -97,12 +104,29 @@ def select_fields_for_model():
 
                 for col in data:
                     # remove unwanted data columns before writing to file
-                    del col['mother_profession'], col['calories_scone'], col['calories_day'], col['tortilla_calories'], \
-                        col['comfort_food'], col['calories_chicken'], col['on_off_campus'], col['diet_current'], \
-                        col['healthy_meal'], col['mother_education'], col['ethnic_food'], col['father_profession'], \
-                        col['eating_changes_coded'], col['turkey_calories'], col['ideal_diet'], col['waffle_calories'], \
-                        col['income'], col['meals_dinner_friend'], col['grade_level'], col['type_sports'], \
-                        col['fav_cuisine'], col['father_education'], col['GPA']
+                    del col['mother_profession'], \
+                        col['calories_scone'], \
+                        col['calories_day'], \
+                        col['tortilla_calories'], \
+                        col['comfort_food'], \
+                        col['calories_chicken'], \
+                        col['on_off_campus'], \
+                        col['diet_current'], \
+                        col['healthy_meal'], \
+                        col['mother_education'], \
+                        col['ethnic_food'], \
+                        col['father_profession'], \
+                        col['eating_changes_coded'], \
+                        col['turkey_calories'], \
+                        col['ideal_diet'], \
+                        col['waffle_calories'], \
+                        col['income'], \
+                        col['meals_dinner_friend'], \
+                        col['grade_level'], \
+                        col['type_sports'], \
+                        col['fav_cuisine'], \
+                        col['father_education'], \
+                        col['GPA']
 
                     model_csv.writerow(col)
 
@@ -234,7 +258,6 @@ def calculate_tf_users():
         with open(TRAINING_DATA, "r") as csv_data:
             u_data = csv.DictReader(csv_data)
             food_childhood_entries = []
-            food_childhood = []
             for row in u_data:
                 food_childhood_entries.append(row["food_childhood"])
 
@@ -333,7 +356,8 @@ def calculate_tf_childhood_food():
                 childhood_food = childhood_food.replace(",", "").lower().split()
                 users_food.append(childhood_food)
 
-        return [users_food, food_childhood_tf, food_childhood_df, k]
+        # return [users_food, food_childhood_tf, food_childhood_df, k]
+        return users_food, food_childhood_tf, food_childhood_df, k
 
 
 def calculate_df_cuisine():
@@ -344,23 +368,17 @@ def calculate_df_cuisine():
     restaurant_object = {}
     # get restaurant id
     for ids in r_data["restaurants"]:
-        tmp_id = ids["restaurant"]["id"].lower()
-        tmp_name = ids["restaurant"]["name"]
-        tmp_cuisine = ids["restaurant"]["cuisines"].lower()
+        # loop through restaurant.json and add id, name and cuisines to arrays,
+        # should really make use of objects.
+        # e.g. one restaurant object that has id, name and cuisine
+        tmp_id = ids["restaurant"]["id"]
         r_id.append(tmp_id)
+        tmp_name = ids["restaurant"]["name"].lower()
         r_name.append(tmp_name)
+        tmp_cuisine = ids["restaurant"]["cuisines"].lower()
         cuisines.append(tmp_cuisine)
 
     restaurant_cuisines = cuisines
-
-    for i in range(len(cuisines)):
-        cuisines[i] = cuisines[i].replace(",", "")
-
-    a = []
-    for i in range(len(cuisines)):
-        c = cuisines[i].split()
-        for j in range(len(c)):
-            a.append(c[j])
 
     for i in range(len(r_id)):
         restaurant_object.update([(r_id[i], restaurant_cuisines[i])])
@@ -396,10 +414,9 @@ def calculate_df_cuisine():
     # df of cuisines
     df = []
     for i in k:
-        # cuisines["IDF"] = a - math.log10(len(k))
         df.append(a - math.log10(k[i]))
 
-    # tf
+    # term-frequency
     tf = []
     for value in k:
         tf.append(k[value])
@@ -450,10 +467,10 @@ def calculate_df_cuisine():
         tmp.append(o.split())
 
     restaurant_score = []
+    value = 1
     for o in tmp:
         for i in o:
             print(i)
-            value = 1
             if i in obj.keys():
                 print(obj.get(i))
                 value = obj.get(i) * value
@@ -463,11 +480,13 @@ def calculate_df_cuisine():
     for i in range(len(r_id)):
         print("{:<15} {:<50} {:<10}".format(r_id[i], restaurant_cuisines[i], restaurant_score[i]))
 
-    child_hood_scores = calculate_tf_childhood_food()
-    user_score = child_hood_scores[1]
-    users_childhood_food = child_hood_scores[0]
-    food_weight = child_hood_scores[2]
-    food_array = child_hood_scores[3]
+    # child_hood_scores = calculate_tf_childhood_food()
+    # users_childhood_food = child_hood_scores[0]
+    # user_score = child_hood_scores[1]
+    # food_weight = child_hood_scores[2]
+    # food_array = child_hood_scores[3]
+    users_childhood_food, user_score, food_weight, food_array = calculate_tf_childhood_food()
+
     cuisine_score = obj
     print("User Score: ", user_score, "\n", type(users_childhood_food))
     print(cuisine_score.keys())
@@ -499,7 +518,7 @@ def calculate_df_cuisine():
     b = []
     for i in range(len(restaurant_score)):
         if a == restaurant_score[i]:
-            print(r_name[i])
+            print("Name: {} Score: {}".format(r_name[i], restaurant_score[i]))
             b.append((r_name[i], restaurant_score[i]))
     return b
 
@@ -517,6 +536,7 @@ def get_closest(v1, v2, target):
 def look_for_closest(restaurant_score, user_score):
     i = 0
     j = len(restaurant_score)
+    mid = 0
     while i < j:
         mid = int((i + j) / 2)
         if restaurant_score[mid] == user_score:
